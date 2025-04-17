@@ -14,7 +14,7 @@ export const CtaSection = () => {
         </p>
         
         <Link to="/connexion">
-          <Button className="button-primary mx-auto py-6 px-8 text-base">
+          <Button className="bg-primary text-white hover:bg-primary/90 py-6 px-8 text-base rounded-md transition-colors">
             Demander un accès à la beta
           </Button>
         </Link>

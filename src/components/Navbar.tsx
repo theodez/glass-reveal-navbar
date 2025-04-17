@@ -32,6 +32,19 @@ export const Navbar = () => {
     }
   };
 
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [mobileMenuOpen]);
+
   return (
     <header 
       className={cn(
@@ -48,23 +61,29 @@ export const Navbar = () => {
           </Link>
         </div>
         
-        {/* Mobile menu overlay */}
-        {mobileMenuOpen && isMobile && (
+        {/* Mobile menu overlay with improved animation */}
+        {isMobile && (
           <div 
-            className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40" 
+            className={cn(
+              "fixed inset-0 bg-black/60 backdrop-blur-sm z-40 transition-opacity duration-300",
+              mobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+            )}
             onClick={() => setMobileMenuOpen(false)}
           />
         )}
         
-        {/* Navigation links */}
+        {/* Navigation links with improved animation */}
         <nav 
           className={cn(
             "md:flex items-center gap-8 transition-all duration-300",
-            mobileMenuOpen && isMobile 
-              ? "fixed top-[70px] right-0 bottom-0 w-[250px] bg-white dark:bg-gray-900 shadow-lg flex flex-col items-start p-6 z-50 transform translate-x-0" 
+            isMobile 
+              ? "fixed top-0 right-0 bottom-0 w-[280px] bg-white dark:bg-gray-900 shadow-lg flex flex-col items-start p-8 z-50 pt-20" 
+              : "hidden",
+            isMobile && mobileMenuOpen 
+              ? "transform translate-x-0" 
               : isMobile 
-                ? "fixed top-[70px] right-0 bottom-0 w-[250px] bg-white dark:bg-gray-900 shadow-lg flex flex-col items-start p-6 z-50 transform translate-x-full" 
-                : "hidden"
+                ? "transform translate-x-full" 
+                : ""
           )}
         >
           <a href="#avantages" className="font-medium hover:text-primary transition-colors block md:inline-block py-3 md:py-0 border-b md:border-b-0 border-gray-100 w-full md:w-auto" onClick={handleNavClick}>Ce que vous allez gagner</a>
@@ -78,8 +97,13 @@ export const Navbar = () => {
           <Link to="/connexion" className="button-primary hidden md:inline-flex">
             Connexion
           </Link>
+          
+          {/* Mobile menu toggle button with improved position */}
           <Button 
-            className="md:hidden" 
+            className={cn(
+              "md:hidden z-50 relative", 
+              mobileMenuOpen ? "text-gray-800" : ""
+            )}
             variant="outline" 
             size="icon"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
