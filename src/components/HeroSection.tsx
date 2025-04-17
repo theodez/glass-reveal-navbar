@@ -6,7 +6,7 @@ export const HeroSection = () => {
   return (
     <section className="pt-28 pb-16 min-h-screen relative">
       {/* Diagonal gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary-light to-white -z-10"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-primary-light via-white/50 to-white -z-10"></div>
       
       <div className="container mx-auto px-4 grid md:grid-cols-2 gap-12 items-center relative z-10">
         <div className="space-y-6">
