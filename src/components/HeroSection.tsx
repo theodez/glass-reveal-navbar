@@ -1,5 +1,6 @@
 
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 export const HeroSection = () => {
   return (
@@ -35,9 +36,11 @@ export const HeroSection = () => {
             </span>
           </div>
           
-          <Button className="button-primary">
-            Demander la beta gratuite
-          </Button>
+          <Link to="/connexion">
+            <Button className="button-primary">
+              Demander la beta gratuite
+            </Button>
+          </Link>
         </div>
 
         <div className="md:order-1 order-0">

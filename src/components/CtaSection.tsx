@@ -1,5 +1,6 @@
 
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 export const CtaSection = () => {
   return (
@@ -12,9 +13,11 @@ export const CtaSection = () => {
           Accès gratuit pour les 15 premières entreprises
         </p>
         
-        <Button className="button-primary mx-auto">
-          Demander un accès à beta
-        </Button>
+        <Link to="/connexion">
+          <Button className="button-primary mx-auto">
+            Demander un accès à beta
+          </Button>
+        </Link>
       </div>
     </section>
   );
