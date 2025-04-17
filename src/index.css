@@ -70,7 +70,7 @@
 }
 
 .glass-effect {
-  @apply backdrop-blur-md bg-white/70 dark:bg-black/30 border-b border-white/10 shadow-sm transition-all duration-300;
+  @apply backdrop-blur-md bg-white/70 dark:bg-black/30 border-b border-white/10 shadow-sm transition-all duration-200;
 }
 
 .bg-hero {

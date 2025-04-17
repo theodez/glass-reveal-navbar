@@ -13,7 +13,7 @@ export const Navbar = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      const isScrolled = window.scrollY > 50;
+      const isScrolled = window.scrollY > 20; // Reduced this value from 50 to 20
       if (isScrolled !== scrolled) {
         setScrolled(isScrolled);
       }
@@ -48,7 +48,7 @@ export const Navbar = () => {
   return (
     <header 
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 w-full",
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-200", // Reduced duration from 300ms to 200ms
         scrolled ? "glass-effect py-3" : "bg-transparent py-4"
       )}
     >
@@ -65,7 +65,7 @@ export const Navbar = () => {
         {isMobile && (
           <div 
             className={cn(
-              "fixed inset-0 bg-black/60 backdrop-blur-sm z-40 transition-opacity duration-300",
+              "fixed inset-0 bg-black/60 backdrop-blur-sm z-40 transition-opacity duration-200", // Reduced from 300ms to 200ms
               mobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
             )}
             onClick={() => setMobileMenuOpen(false)}
@@ -75,7 +75,7 @@ export const Navbar = () => {
         {/* Navigation links with improved animation */}
         <nav 
           className={cn(
-            "md:flex items-center gap-8 transition-all duration-300",
+            "md:flex items-center gap-8 transition-all duration-200", // Reduced from 300ms to 200ms
             isMobile 
               ? "fixed top-0 right-0 bottom-0 w-[280px] bg-white dark:bg-gray-900 shadow-lg flex flex-col items-start p-8 z-50 pt-20" 
               : "hidden",

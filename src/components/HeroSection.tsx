@@ -4,8 +4,11 @@ import { Link } from "react-router-dom";
 
 export const HeroSection = () => {
   return (
-    <section className="pt-28 pb-16 bg-hero min-h-screen">
-      <div className="container mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
+    <section className="pt-28 pb-16 min-h-screen relative">
+      {/* Diagonal gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary to-white -z-10"></div>
+      
+      <div className="container mx-auto px-4 grid md:grid-cols-2 gap-12 items-center relative z-10">
         <div className="space-y-6">
           <h1 className="text-4xl md:text-5xl font-bold leading-tight">
             L'outil pour gérer les formations de vos salariés, et rester <span className="text-highlight">en conformité.</span>
