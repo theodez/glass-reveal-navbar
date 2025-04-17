@@ -3,10 +3,13 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
+import { Menu, X } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,6 +24,13 @@ export const Navbar = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, [scrolled]);
+
+  // Close mobile menu when navigating to a different section
+  const handleNavClick = () => {
+    if (mobileMenuOpen) {
+      setMobileMenuOpen(false);
+    }
+  };
 
   return (
     <header 
@@ -38,15 +48,30 @@ export const Navbar = () => {
           </Link>
         </div>
         
-        <nav className={cn(
-          "md:flex items-center gap-8",
-          mobileMenuOpen ? "block absolute top-full left-0 right-0 bg-white shadow-lg p-4 mt-2" : "hidden"
-        )}>
-          <a href="#avantages" className="font-medium hover:text-primary transition-colors block md:inline-block py-2 md:py-0">Ce que vous allez gagner</a>
-          <a href="#testimonials" className="font-medium hover:text-primary transition-colors block md:inline-block py-2 md:py-0">Voix d'utilisateur pro</a>
-          <a href="#faq" className="font-medium hover:text-primary transition-colors block md:inline-block py-2 md:py-0">FAQ</a>
-          <a href="#contact" className="font-medium hover:text-primary transition-colors block md:inline-block py-2 md:py-0">Contact</a>
-          <Link to="/connexion" className="font-medium hover:text-primary transition-colors block md:inline-block py-2 md:py-0">Connexion</Link>
+        {/* Mobile menu overlay */}
+        {mobileMenuOpen && isMobile && (
+          <div 
+            className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40" 
+            onClick={() => setMobileMenuOpen(false)}
+          />
+        )}
+        
+        {/* Navigation links */}
+        <nav 
+          className={cn(
+            "md:flex items-center gap-8 transition-all duration-300",
+            mobileMenuOpen && isMobile 
+              ? "fixed top-[70px] right-0 bottom-0 w-[250px] bg-white dark:bg-gray-900 shadow-lg flex flex-col items-start p-6 z-50 transform translate-x-0" 
+              : isMobile 
+                ? "fixed top-[70px] right-0 bottom-0 w-[250px] bg-white dark:bg-gray-900 shadow-lg flex flex-col items-start p-6 z-50 transform translate-x-full" 
+                : "hidden"
+          )}
+        >
+          <a href="#avantages" className="font-medium hover:text-primary transition-colors block md:inline-block py-3 md:py-0 border-b md:border-b-0 border-gray-100 w-full md:w-auto" onClick={handleNavClick}>Ce que vous allez gagner</a>
+          <a href="#testimonials" className="font-medium hover:text-primary transition-colors block md:inline-block py-3 md:py-0 border-b md:border-b-0 border-gray-100 w-full md:w-auto" onClick={handleNavClick}>Voix d'utilisateur pro</a>
+          <a href="#faq" className="font-medium hover:text-primary transition-colors block md:inline-block py-3 md:py-0 border-b md:border-b-0 border-gray-100 w-full md:w-auto" onClick={handleNavClick}>FAQ</a>
+          <a href="#contact" className="font-medium hover:text-primary transition-colors block md:inline-block py-3 md:py-0 border-b md:border-b-0 border-gray-100 w-full md:w-auto" onClick={handleNavClick}>Contact</a>
+          <Link to="/connexion" className="font-medium text-primary hover:text-primary/80 transition-colors block md:inline-block py-3 md:py-0 w-full md:w-auto mt-3 md:mt-0" onClick={handleNavClick}>Connexion</Link>
         </nav>
         
         <div className="flex items-center">
@@ -59,7 +84,11 @@ export const Navbar = () => {
             size="icon"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+            {mobileMenuOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
           </Button>
         </div>
       </div>
