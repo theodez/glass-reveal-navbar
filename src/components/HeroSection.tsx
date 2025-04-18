@@ -1,9 +1,10 @@
+
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
 export const HeroSection = () => {
   return (
-    <section className="pt-32 pb-12 relative">
+    <section className="pt-36 pb-12 relative">
       {/* Diagonal gradient overlay without rotation */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#FEC6A1] via-white/80 to-white -z-10"></div>
       

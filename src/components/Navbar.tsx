@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -58,6 +59,7 @@ export const Navbar = () => {
           </Link>
         </div>
         
+        {/* Mobile overlay */}
         {isMobile && (
           <div 
             className={cn(
@@ -68,6 +70,7 @@ export const Navbar = () => {
           />
         )}
         
+        {/* Navigation menu */}
         <nav 
           className={cn(
             "md:flex items-center gap-8 transition-all duration-200",
@@ -83,7 +86,7 @@ export const Navbar = () => {
           
           <Link 
             to="/connexion" 
-            className="w-full md:hidden" 
+            className="w-full md:hidden mt-4" 
             onClick={handleNavClick}
           >
             <Button className="w-full">Connexion</Button>
