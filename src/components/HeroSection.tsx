@@ -1,12 +1,13 @@
 
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { Card } from "@/components/ui/card";
 
 export const HeroSection = () => {
   return (
     <section className="pt-28 pb-16 min-h-screen relative">
       {/* Diagonal gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary-light via-white/50 to-white -z-10"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-[#FEC6A1] via-white/80 to-white -z-10 transform -rotate-6 scale-110"></div>
       
       <div className="container mx-auto px-4 grid md:grid-cols-2 gap-12 items-center relative z-10">
         <div className="space-y-6">
@@ -17,6 +18,23 @@ export const HeroSection = () => {
             Créez et visualisez les formations de vos salariés, recevez des 
             notifications de rappels, suivez vos recyclages, et demandez des devis.
           </p>
+
+          <div className="flex flex-wrap gap-6">
+            <Card className="p-6 bg-white/80 backdrop-blur shadow-lg">
+              <p className="text-2xl font-bold text-primary mb-2">29€</p>
+              <p className="text-sm text-gray-600">par mois / utilisateur</p>
+              <ul className="mt-4 space-y-2">
+                <li className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-primary rounded-full"></div>
+                  <span className="text-sm">Accès illimité</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-primary rounded-full"></div>
+                  <span className="text-sm">Support premium</span>
+                </li>
+              </ul>
+            </Card>
+          </div>
           
           <div className="flex flex-wrap gap-4 pt-2">
             <div className="flex items-center gap-2">
@@ -49,9 +67,9 @@ export const HeroSection = () => {
         <div className="md:order-1 order-0">
           <div className="bg-white p-4 rounded-xl shadow-xl">
             <img 
-              src="lovable-uploads/513478b0-3595-4d9f-afe9-73bca989bca1.png" 
-              alt="Plateforme UpForm" 
-              className="w-full rounded-md" 
+              src="/placeholder.svg"
+              alt="Dashboard UpForm" 
+              className="w-full rounded-md aspect-[16/10] object-cover bg-gray-100"
             />
           </div>
         </div>
