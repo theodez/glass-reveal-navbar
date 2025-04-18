@@ -1,7 +1,38 @@
 
-import { ArrowRight } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Progress } from "@/components/ui/progress";
+import { cn } from "@/lib/utils";
+
+const steps = [
+  {
+    number: 1,
+    title: "Choisissez vos besoins",
+    description: "Indiquez les cursus et modules de formation"
+  },
+  {
+    number: 2,
+    title: "On vous propose des solutions",
+    description: "Voir notre réseau"
+  },
+  {
+    number: 3,
+    title: "Recevez vos devis personnalisés",
+    description: "Sous 48h par email"
+  }
+];
 
 export const ProcessSection = () => {
+  const [activeStep, setActiveStep] = useState(0);
+  const progressValue = ((activeStep + 1) / steps.length) * 100;
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveStep((current) => (current + 1) % steps.length);
+    }, 3000); // Change step every 3 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <section className="py-20 bg-gray-50">
       <div className="container mx-auto px-4">
@@ -9,61 +40,46 @@ export const ProcessSection = () => {
           Comment optimiser la gestion de vos formations ?
         </h2>
         
-        <div className="grid gap-16">
-          <h3 className="text-2xl font-semibold text-center">
-            Processus simple en 3 étapes
-          </h3>
+        <div className="max-w-3xl mx-auto">
+          <Progress value={progressValue} className="h-2 mb-12" />
           
-          <div className="max-w-5xl mx-auto">
-            {/* Timeline container */}
-            <div className="relative">
-              {/* Timeline line */}
-              <div className="absolute left-4 md:left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-primary/30"></div>
-              
-              {/* Step 1 */}
-              <div className="relative flex md:justify-between items-center mb-12 md:even:flex-row-reverse">
-                <div className="flex items-center gap-4 md:w-[45%]">
-                  <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white font-bold z-10">
-                    1
+          <div className="relative">
+            {steps.map((step, index) => (
+              <div
+                key={step.number}
+                className={cn(
+                  "transition-all duration-500 absolute inset-0",
+                  index === activeStep 
+                    ? "opacity-100 transform translate-y-0" 
+                    : "opacity-0 transform translate-y-8 pointer-events-none"
+                )}
+              >
+                <div className="flex items-start gap-6">
+                  <div className="flex-shrink-0">
+                    <div className="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center text-xl font-bold">
+                      {step.number}
+                    </div>
                   </div>
-                  <div className="flex-1 p-4 bg-white rounded-lg shadow-sm">
-                    <h4 className="text-xl font-semibold mb-2">Choisissez vos besoins</h4>
-                    <p className="text-gray-600">
-                      Indiquez les cursus et modules de formation
+                  
+                  <div className="flex-grow pt-2">
+                    <h3 className="text-2xl font-semibold mb-3">
+                      {step.title}
+                    </h3>
+                    <p className="text-gray-600 text-lg">
+                      {step.description}
                     </p>
                   </div>
                 </div>
-                <ArrowRight className="hidden md:block text-primary absolute left-1/2 -translate-x-1/2" />
               </div>
-              
-              {/* Step 2 */}
-              <div className="relative flex md:justify-between items-center mb-12 md:even:flex-row-reverse">
-                <div className="flex items-center gap-4 md:w-[45%]">
-                  <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white font-bold z-10">
-                    2
-                  </div>
-                  <div className="flex-1 p-4 bg-white rounded-lg shadow-sm">
-                    <h4 className="text-xl font-semibold mb-2">On vous propose des solutions</h4>
-                    <p className="text-gray-600">
-                      Voir notre réseau
-                    </p>
-                  </div>
-                </div>
-                <ArrowRight className="hidden md:block text-primary absolute left-1/2 -translate-x-1/2" />
-              </div>
-              
-              {/* Step 3 */}
-              <div className="relative flex md:justify-between items-center">
-                <div className="flex items-center gap-4 md:w-[45%]">
-                  <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white font-bold z-10">
-                    3
-                  </div>
-                  <div className="flex-1 p-4 bg-white rounded-lg shadow-sm">
-                    <h4 className="text-xl font-semibold mb-2">Recevez vos devis personnalisés</h4>
-                    <p className="text-gray-600">
-                      Sous 48h par email
-                    </p>
-                  </div>
+            ))}
+            
+            {/* Spacer div to maintain height */}
+            <div className="opacity-0 pointer-events-none">
+              <div className="flex items-start gap-6">
+                <div className="w-12 h-12" />
+                <div className="pt-2">
+                  <h3 className="text-2xl font-semibold mb-3">Placeholder</h3>
+                  <p className="text-gray-600 text-lg">Placeholder</p>
                 </div>
               </div>
             </div>
