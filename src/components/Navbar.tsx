@@ -4,44 +4,24 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
-import { useIsMobile } from "@/hooks/use-mobile";
 
 export const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const isMobile = useIsMobile();
 
   useEffect(() => {
     const handleScroll = () => {
-      const isScrolled = window.scrollY > 20;
-      if (isScrolled !== scrolled) {
-        setScrolled(isScrolled);
-      }
+      setScrolled(window.scrollY > 20);
     };
 
     window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [scrolled]);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-  const handleNavClick = () => {
-    if (mobileMenuOpen) {
-      setMobileMenuOpen(false);
-    }
-  };
-
+  // Close mobile menu when route changes
   useEffect(() => {
-    if (mobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [mobileMenuOpen]);
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
 
   return (
     <header 
@@ -51,69 +31,47 @@ export const Navbar = () => {
       )}
     >
       <div className="container mx-auto flex justify-between items-center px-4">
-        <div className="flex items-center">
-          <Link to="/" className="flex items-center">
-            <span className="text-xl font-bold flex items-center">
-              <span className="bg-primary text-white p-1 rounded mr-1">Up</span>Form
-            </span>
-          </Link>
-        </div>
-        
-        {/* Mobile overlay */}
-        {isMobile && (
-          <div 
-            className={cn(
-              "fixed inset-0 bg-black/60 backdrop-blur-sm z-40 transition-opacity duration-200",
-              mobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-            )}
-            onClick={() => setMobileMenuOpen(false)}
-          />
-        )}
-        
-        {/* Navigation menu */}
-        <nav 
-          className={cn(
-            "md:flex items-center gap-8 transition-all duration-200",
-            isMobile 
-              ? "fixed top-0 right-0 bottom-0 w-[280px] bg-white dark:bg-gray-900 shadow-lg flex flex-col items-start p-8 z-50 pt-20" 
-              : "hidden"
-          )}
-        >
-          <a href="#avantages" className="font-medium hover:text-primary transition-colors block md:inline-block py-3 md:py-0 border-b md:border-b-0 border-gray-100 w-full md:w-auto" onClick={handleNavClick}>Ce que vous allez gagner</a>
-          <a href="#testimonials" className="font-medium hover:text-primary transition-colors block md:inline-block py-3 md:py-0 border-b md:border-b-0 border-gray-100 w-full md:w-auto" onClick={handleNavClick}>Voix d'utilisateur pro</a>
-          <a href="#faq" className="font-medium hover:text-primary transition-colors block md:inline-block py-3 md:py-0 border-b md:border-b-0 border-gray-100 w-full md:w-auto" onClick={handleNavClick}>FAQ</a>
-          <a href="#contact" className="font-medium hover:text-primary transition-colors block md:inline-block py-3 md:py-0 border-b md:border-b-0 border-gray-100 w-full md:w-auto" onClick={handleNavClick}>Contact</a>
-          
-          <Link 
-            to="/connexion" 
-            className="w-full md:hidden mt-4" 
-            onClick={handleNavClick}
-          >
-            <Button className="w-full">Connexion</Button>
-          </Link>
-        </nav>
-        
-        <div className="flex items-center gap-4">
-          <Link to="/connexion" className="hidden md:inline-flex">
+        <Link to="/" className="flex items-center">
+          <span className="text-xl font-bold flex items-center">
+            <span className="bg-primary text-white p-1 rounded mr-1">Up</span>Form
+          </span>
+        </Link>
+
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center gap-8">
+          <a href="#avantages" className="font-medium hover:text-primary transition-colors">Ce que vous allez gagner</a>
+          <a href="#testimonials" className="font-medium hover:text-primary transition-colors">Voix d'utilisateur pro</a>
+          <a href="#faq" className="font-medium hover:text-primary transition-colors">FAQ</a>
+          <a href="#contact" className="font-medium hover:text-primary transition-colors">Contact</a>
+          <Link to="/connexion">
             <Button>Connexion</Button>
           </Link>
-          
-          <Button 
-            className={cn(
-              "md:hidden z-50 relative",
-              mobileMenuOpen ? "text-gray-800" : ""
-            )}
-            variant="outline" 
-            size="icon"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? (
-              <X className="h-5 w-5" />
-            ) : (
-              <Menu className="h-5 w-5" />
-            )}
-          </Button>
-        </div>
+        </nav>
+
+        {/* Mobile Menu Button */}
+        <Button 
+          className="md:hidden"
+          variant="ghost" 
+          size="icon"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        >
+          {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        </Button>
+
+        {/* Mobile Menu Overlay */}
+        {mobileMenuOpen && (
+          <div className="md:hidden fixed inset-0 top-[64px] bg-background/95 backdrop-blur-sm">
+            <nav className="flex flex-col items-start p-4 space-y-4">
+              <a href="#avantages" className="font-medium w-full hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>Ce que vous allez gagner</a>
+              <a href="#testimonials" className="font-medium w-full hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>Voix d'utilisateur pro</a>
+              <a href="#faq" className="font-medium w-full hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>FAQ</a>
+              <a href="#contact" className="font-medium w-full hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>Contact</a>
+              <Link to="/connexion" className="w-full" onClick={() => setMobileMenuOpen(false)}>
+                <Button className="w-full">Connexion</Button>
+              </Link>
+            </nav>
+          </div>
+        )}
       </div>
     </header>
   );

@@ -1,22 +1,21 @@
 
-import { useEffect, useState } from "react";
-import { Progress } from "@/components/ui/progress";
-import { cn } from "@/lib/utils";
-import { CheckCircle2 } from "lucide-react";
+import { motion, useAnimation, useInView } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { BookOpen, Network, MailCheck } from "lucide-react";
 
 const steps = [
   {
-    number: 1,
+    icon: BookOpen,
     title: "Choisissez vos besoins",
     description: "Indiquez les cursus et modules de formation"
   },
   {
-    number: 2,
+    icon: Network,
     title: "On vous propose des solutions",
     description: "Voir notre réseau"
   },
   {
-    number: 3,
+    icon: MailCheck,
     title: "Recevez vos devis personnalisés",
     description: "Sous 48h par email"
   }
@@ -24,91 +23,94 @@ const steps = [
 
 export const ProcessSection = () => {
   const [activeStep, setActiveStep] = useState(0);
-  const progressValue = ((activeStep + 1) / steps.length) * 100;
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: false, margin: "-100px" });
+  const controls = useAnimation();
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveStep((current) => (current + 1) % steps.length);
-    }, 3000); // Change step every 3 seconds
-
-    return () => clearInterval(interval);
-  }, []);
+    if (isInView) {
+      controls.start("visible");
+      const interval = setInterval(() => {
+        setActiveStep((prev) => (prev + 1) % steps.length);
+      }, 3000);
+      return () => clearInterval(interval);
+    } else {
+      controls.start("hidden");
+    }
+  }, [isInView, controls]);
 
   return (
-    <section className="py-20 bg-gray-50">
+    <section ref={ref} className="py-24 bg-gray-50">
       <div className="container mx-auto px-4">
         <h2 className="text-4xl font-bold text-center mb-16">
           Comment optimiser la gestion de vos formations ?
         </h2>
-        
-        <div className="max-w-4xl mx-auto">
-          <div className="flex items-center justify-between mb-8">
-            {steps.map((step, index) => (
-              <div 
-                key={step.number}
-                className="flex flex-col items-center relative"
-              >
-                <div 
-                  className={cn(
-                    "w-16 h-16 rounded-full flex items-center justify-center transition-all duration-500 border-2",
-                    index < activeStep 
-                      ? "bg-primary border-primary text-white" 
-                      : index === activeStep 
-                        ? "bg-white border-primary text-primary" 
-                        : "bg-gray-100 border-gray-200 text-gray-400"
-                  )}
+
+        <div className="max-w-4xl mx-auto relative">
+          {/* Progress Line */}
+          <div className="absolute top-[45px] left-[50px] right-[50px] h-0.5 bg-gray-200" />
+          <motion.div
+            className="absolute top-[45px] left-[50px] h-0.5 bg-primary origin-left"
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: activeStep / (steps.length - 1) }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+          />
+
+          <div className="relative grid grid-cols-3 gap-4">
+            {steps.map((step, index) => {
+              const Icon = step.icon;
+              return (
+                <motion.div
+                  key={index}
+                  initial="hidden"
+                  animate={controls}
+                  variants={{
+                    hidden: { opacity: 0, y: 20 },
+                    visible: { 
+                      opacity: 1, 
+                      y: 0,
+                      transition: { 
+                        duration: 0.5,
+                        delay: index * 0.2 
+                      }
+                    }
+                  }}
+                  className="relative"
                 >
-                  {index < activeStep ? (
-                    <CheckCircle2 className="w-8 h-8" />
-                  ) : (
-                    <span className="text-xl font-bold">{step.number}</span>
-                  )}
-                </div>
-                
-                <div className={cn(
-                  "absolute top-20 w-48 text-center transition-all duration-500",
-                  index === activeStep ? "opacity-100 scale-100" : "opacity-50 scale-95"
-                )}>
-                  <h3 className={cn(
-                    "text-lg font-semibold mb-1 transition-colors",
-                    index === activeStep ? "text-primary" : "text-gray-500"
-                  )}>
-                    {step.title}
-                  </h3>
-                  <p className={cn(
-                    "text-sm transition-colors",
-                    index === activeStep ? "text-gray-700" : "text-gray-400"
-                  )}>
-                    {step.description}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-          
-          {/* Connecting lines */}
-          <div className="relative -mt-8 mb-16">
-            <div className="absolute top-8 left-[16%] right-[16%] h-1 bg-gray-200"></div>
-            <div 
-              className="absolute top-8 left-[16%] h-1 bg-primary transition-all duration-300 ease-in-out"
-              style={{ width: `${(activeStep / (steps.length - 1)) * 68}%` }}
-            ></div>
-          </div>
-          
-          <div className="mt-24 p-6 bg-white rounded-lg shadow-md border border-gray-100">
-            <div className="flex items-center gap-4 mb-2">
-              <div className="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center text-xl font-bold">
-                {activeStep + 1}
-              </div>
-              
-              <h3 className="text-2xl font-semibold text-primary">
-                {steps[activeStep].title}
-              </h3>
-            </div>
-            
-            <p className="text-gray-600 ml-16 text-lg">
-              {steps[activeStep].description}
-            </p>
+                  <motion.div
+                    className={`w-24 h-24 mx-auto rounded-full flex items-center justify-center ${
+                      index <= activeStep ? 'bg-primary text-white' : 'bg-gray-100 text-gray-400'
+                    }`}
+                    animate={{
+                      scale: index === activeStep ? 1.1 : 1,
+                      backgroundColor: index <= activeStep ? 'var(--primary)' : '#f3f4f6'
+                    }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <Icon className="w-8 h-8" />
+                  </motion.div>
+                  
+                  <motion.div
+                    className="text-center mt-6 space-y-2"
+                    animate={{
+                      opacity: index === activeStep ? 1 : 0.5
+                    }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <h3 className={`text-lg font-semibold ${
+                      index === activeStep ? 'text-primary' : 'text-gray-600'
+                    }`}>
+                      {step.title}
+                    </h3>
+                    <p className={`text-sm ${
+                      index === activeStep ? 'text-gray-700' : 'text-gray-400'
+                    }`}>
+                      {step.description}
+                    </p>
+                  </motion.div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </div>
